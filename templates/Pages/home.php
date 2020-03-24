@@ -1,10 +1,5 @@
-        <!-- **********************************************************************************************************************************************************
-        MAIN CONTENT
-        *********************************************************************************************************************************************************** -->
-        <!--main content start-->
-        <section id="main-content">
-            <section class="wrapper">
-                <div class="row">
+
+                <div class="row hidden">
                     <div class="col-lg-12 main-chart">
                         <!--CUSTOM CHART START -->
                         <div class="border-head">
@@ -48,7 +43,3 @@
                                 <div class="value tooltips" data-original-title="7.500" data-toggle="tooltip" data-placement="top">75%</div>
                             </div>
                         </div>
-                        <!--custom chart end-->
-
-            </section>
-        </section>

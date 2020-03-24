@@ -4,9 +4,9 @@
                 <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
             </div>
             <!--logo start-->
-            <a href="index.html" class="logo"><b>MANE<span>JO</span></b></a>
+            <a href="/" class="logo"><b>MANE<span>JO</span></b></a>
             <!--logo end-->
-            <div class="nav notify-row" id="top_menu">
+            <div class="nav notify-row hidden" id="top_menu">
                 <!--  notification start -->
                 <ul class="nav top-menu">
                     <!-- settings start -->
@@ -193,7 +193,10 @@
             </div>
             <div class="top-menu">
                 <ul class="nav pull-right top-menu">
-                    <li><a class="logout" href="users/logout">Logout</a></li>
+                    
+                    <li><a class="logout" href="/users/config"><i class = "fa fa-cog"></i></a></li>
+                    <li><a class="logout" href="/users/logout">Logout</a></li>
                 </ul>
             </div>
+            
         </header>

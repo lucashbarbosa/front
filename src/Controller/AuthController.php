@@ -37,7 +37,7 @@ class AuthController extends AppController
     }
     public function getPassword()
     {
-        return $this->password;
+        return $this->password; 
     }
 
 
@@ -45,10 +45,10 @@ class AuthController extends AppController
     {
 
         $http = new Client();
-        $response = $http->get('http://localhost:3000/users/login', [], [
+        $response = $http->post('http://api.commitment-services.com.br/users/login', [], [
           'auth' => ['username' => $this->user, 'password' => $this->password]
         ]);
-            
+
         if(isset($response->getJson()['data'])){
             return $response->getJson()['data'];
         }else{
@@ -65,9 +65,22 @@ class AuthController extends AppController
 
         $this->getRequest()->getSession()->write('User.auth.token', $info);
 
-
         
     }
+
+    public function allowed(){
+        return [
+            'users/logon',
+            'logon'
+
+        ];
+    }
+
+
+    public function isAllowed($url){
+        return in_array($url, $this->allowed() ) ? true : false;
+    }
+
 
     public function readToken(){
         return $this->getRequest()->getSession()->read('User.auth.token');

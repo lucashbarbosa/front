@@ -13,28 +13,39 @@ class RequestController extends AppController
 
 
     public $params;
-    public $base_url = "http://localhost:3000";
+    public $base_url = "http://api.commitment-services.com.br";
 
 
 
 
     public function getToken()
     {
-        return (new AuthController())->getToken();
+        return (new AuthController())->readToken()['token'];
     }
 
 
-    public function post($data = [])
+    public function post($data = [], $passThru = false)
     {
-        echo $this->getToken();
-        die();
+
+        if($passThru){
+            $http = new Client([
+                'headers' => [
+                "Accept" => "application/json", 
+                "Content-Type" => "application/json"]
+            ]);  
             
-        $http = new Client([
-            'headers' => ['Authorization' => 'Bearer ' . $this->getToken()]
-        ]);
+
+        }else{
+            $http = new Client([
+                'headers' => ['Authorization' => 'Bearer ' . $this->getToken(), 
+                "Accept" => "application/json", 
+                "Content-Type" => "application/json"]
+            ]);
+        }
+
         $response = $http->post($this->base_url . "/" . $this->params, $data);
-        
-        if ($response->getJson()['message'] == 'Invalid Token') {
+
+        if (isset($response->getJson()['message']) && $response->getJson()['message'] == 'Invalid Token') {
             (new AuthController())->killSession();
             $this->forceRedirect("/users/login");
         }

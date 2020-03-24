@@ -30,6 +30,7 @@ use App\Controller\AuthController;
  */
 class AppController extends Controller
 {
+    public $validation;
     /**
      * Initialization hook method.
      *
@@ -42,7 +43,7 @@ class AppController extends Controller
     public function initialize(): void
     {
         parent::initialize();
-
+        
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
 
@@ -53,23 +54,41 @@ class AppController extends Controller
         //$this->loadComponent('FormProtection');
     }
 
-
+    
 
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
 
-        debug((new AuthController())->readToken());
+        $auth = new AuthController();
+        $controller =  $this->request->getParam('controller');
+        $action =  $this->request->getParam('action');
+        $url = strtolower($controller . "/" . $action);
 
-        if(!(new AuthController())->checkToken()){
-           $controller =  $this->request->getParam('controller');
-           $action =  $this->request->getParam('action');
+ 
 
+
+        if(!$auth->checkToken() && !$auth->isAllowed($url)){
             if($controller != 'users' && $action != 'login'){
-                $this->redirect("users/login");
+
+                $this->forceRedirect("/login");
             }
             
         }
+        $auth = new AuthController();
+        if(isset($auth->readToken()['user'])){
+
+            $user = $auth->readToken()['user'];
+            $this->set(compact('user'));
+
+        }
+
+        if($this->request->getQuery('error')){
+            $showError = (new ValidationController())->throwError($this->request->getQuery('type'));
+            $this->set(compact('showError'));
+        }
+        
+       
 
     }
 
@@ -83,4 +102,8 @@ class AppController extends Controller
     public function forceRedirect($url){
         echo "<script type='text/javascript'>window.location = '$url'; </script>"; //its ugly, but works \O_
     }
+
+
+
+    
 }
